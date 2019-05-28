@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  form(action='/insertProject', method='post')
+    | Naziv :
+    br
+    input(type='text', name='naziv')
+    br
+    |   Opis :
+    br
+    input(type='text', name='opis')
+    br
+    |   Cijena :
+    br
+    input(type='text', name='cijena')
+    br
+    |   Obavljeni poslovi :
+    br
+    input(type='text', name='poslovi')
+    br
+    |   Datum početka :
+    br
+    input(type='date', name='pocetak')
+    br
+    |   Datum završetka :
+    br
+    input(type='date', name='kraj')
+    br
+    input(type='submit', value='Submit')
+br

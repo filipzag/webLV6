@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  each val in data
+    form(action='/updateProject', method='post')
+      input(type='hidden', name='id', value=val.id)
+      | Naziv :
+      br
+      input(type='text', name='naziv', value=val.naziv)
+      br
+      |   Opis :
+      br
+      input(type='text', name='opis', value=val.opis)
+      br
+      |   Cijena :
+      br
+      input(type='text', name='cijena', value=val.cijena)
+      br
+      |   Obavljeni poslovi :
+      br
+      input(type='text', name='poslovi',value=val.obavljeno)
+      br
+      |   Datum početka :
+      br
+      input(type='date', name='pocetak' ,value=val.start_date)
+      br
+      |   Datum završetka :
+      br
+      input(type='date', name='kraj', value=val.end_date)
+      br
+      input(type='submit', value='Uredi')
+br
