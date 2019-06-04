@@ -1,0 +1,16 @@
+extends layout
+block content
+  form(action='/users/registerUserHandle', method='post')
+    | E-mail :
+    br
+    input(type='text', name='email')
+    br
+    |   Password :
+    br
+    input(type='text', name='password')
+    br
+    input(type='submit', value='Register')
+    br
+  br
+  button(onclick="window.location.href = 'http://127.0.0.1:3000/users/login ';") Log in
+

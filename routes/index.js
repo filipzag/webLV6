@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var mysql = require('mysql');
 var path = require('path');
+const session = require('express-session');
+var async = require('async');
 
 
 /* GET home page. */
@@ -155,7 +157,8 @@ router.post('/insertProject', function(req, res,next) {
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'LV6'
+  database: 'LV6',
+  multipleStatements: true
 });
   
    var naziv = req.body.naziv;
@@ -164,25 +167,62 @@ router.post('/insertProject', function(req, res,next) {
    var poslovi = req.body.poslovi;
    var start = req.body.pocetak;
    var end = req.body.kraj;
-
+   var sess=req.session;
+   var loggedinEmail=req.session.email;
+  var loggedinId;
 
 connection.connect();
 
-var sql = `INSERT INTO projects 
-            (
-               id, naziv, opis, cijena, obavljeno, start_date, end_date
-            )
-            VALUES
-            (
-                ?,?, ?, ?, ?, ?, ?
-            )`;
-connection.query(sql, ['',naziv, opis, cijena, poslovi, start , end], function (err, data) {
+
+
+
+
+
+var sql1 = `SELECT * FROM users WHERE email = ?`;
+connection.query(sql1, [loggedinEmail], function (err, data) {
     if (err) {
-        res.send( 'some error occured');
-    } else {
-       res.send('  successfully inserted into db');
+        res.send( 'some error occured in first query');
+    } else{
+  
+      loggedinId=data[0].id;
+
+ console.log(loggedinId);
     }
 });
+
+function insert(){
+var sql2 = "INSERT INTO `projects`(`id`, `naziv`, `opis`, `cijena`, `obavljeno`, `start_date`, `end_date`, `voditelj_id`,`arhiviran`) VALUES (?,?,?,?,?,?,?,?,?)";
+console.log(loggedinId);
+
+var inserts =  ['',naziv, opis, cijena, poslovi, start , end, loggedinId, 0];
+sql2 = mysql.format(sql2, inserts);
+console.log(sql2);
+connection.query(sql2, function (err, data) {
+    if (err) {
+        res.send( 'ERROR WITH DATABASE!');
+        console.log( ['',naziv, opis, cijena, poslovi, start , end, loggedinId]);
+
+         console.log(err.code); // 'ECONNREFUSED'
+  console.log(err); // true
+    } else {
+       res.send('successfully inserted into db');
+    }
+});
+
+
+
+
+
+}
+
+
+setTimeout(insert, 2500);
+
+
+ 
+
+  
+
 
 });
 
